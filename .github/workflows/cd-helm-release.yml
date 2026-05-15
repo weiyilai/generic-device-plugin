@@ -31,8 +31,6 @@ jobs:
 
       - name: Set up Helm
         uses: azure/setup-helm@v3.5
-        with:
-          version: v3.14.3
 
       - name: Run chart-releaser for generic-device-plugin
         id: cr
@@ -53,7 +51,7 @@ jobs:
         id: push
         if: steps.cr.outputs.changed_charts != ''
         run: |
-          out=$(helm push .cr-release-packages/*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts)
+          out=$(helm push .cr-release-packages/*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts 2>&1)
           echo "$out"
           echo "digest=$(awk '/^Digest:/ {print $2}' <<<"$out")" >> "$GITHUB_OUTPUT"
 
